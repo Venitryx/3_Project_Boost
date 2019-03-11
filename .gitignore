@@ -14,6 +14,7 @@
 *.userprefs
 
 # Build results
+[Tt]emp/
 [Ll]ibrary/
 [Dd]ebug/
 [Dd]ebugPublic/
