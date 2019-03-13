@@ -23,20 +23,33 @@ public class Rocket : MonoBehaviour
 
     private void ProcessInput()
     {
+        Thrust();
+        Rotate();
+    }
+
+    private void Rotate()
+    {
+        rigidbody.freezeRotation = true; //freeze physics
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            transform.Rotate(Vector3.forward);
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            transform.Rotate(Vector3.back);
+        }
+
+        rigidbody.freezeRotation = false; //resume physics
+    }
+
+    private void Thrust()
+    {
         if (Input.GetKey(KeyCode.Space))
         {
             rigidbody.AddRelativeForce(Vector3.up);
             if (!audioSource.isPlaying) audioSource.Play();
         }
         else audioSource.Stop();
-
-        if(Input.GetKey(KeyCode.A))
-        {
-            transform.Rotate(Vector3.forward);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            transform.Rotate(Vector3.back); 
-        }
     }
 }
