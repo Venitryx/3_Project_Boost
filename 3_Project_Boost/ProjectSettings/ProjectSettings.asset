@@ -597,6 +597,7 @@ PlayerSettings:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled:
+    Collab: 1
     UNet: 1
   luminIcon:
     m_Name: 
@@ -617,10 +618,10 @@ PlayerSettings:
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
   apiCompatibilityLevel: 6
-  cloudProjectId: 
+  cloudProjectId: 1263e685-4eef-472c-83aa-d3e48b77b3f7
   framebufferDepthMemorylessMode: 0
-  projectName: 
-  organizationId: 
+  projectName: 3_Project_Boost (1)
+  organizationId: codevenix
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
