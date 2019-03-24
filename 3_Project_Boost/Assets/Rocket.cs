@@ -11,6 +11,11 @@ public class Rocket : MonoBehaviour
     [SerializeField] AudioClip mainEngineSound;
     [SerializeField] AudioClip deathSound;
     [SerializeField] AudioClip levelFinishSound;
+    [SerializeField] ParticleSystem starboardEngineParticles;
+    [SerializeField] ParticleSystem portEngineParticles;
+    [SerializeField] ParticleSystem deathParticles;
+    [SerializeField] ParticleSystem levelFinishParticles;
+
 
     Rigidbody rigidbody;
     AudioSource audioSource;
@@ -50,19 +55,35 @@ public class Rocket : MonoBehaviour
             case "Friendly":
                 break;
             case "Finish":
-                state = State.Transcending;
-                audioSource.Stop();
-                audioSource.PlayOneShot(levelFinishSound);
-                Invoke("LoadNextScene", 1f); //parameterize this time
+                StartSuccessSequence();
                 break;
             default:
-                state = State.Dying;
-                audioSource.Stop();
-                audioSource.PlayOneShot(deathSound);
-                Invoke("LoadLevelOne", 1f); //parameterize this time
+                StartDeathSequence();
                 break;
         }
         
+    }
+
+    private void StartDeathSequence()
+    {
+        state = State.Dying;
+        audioSource.Stop();
+        portEngineParticles.Stop();
+        starboardEngineParticles.Stop();
+        audioSource.PlayOneShot(deathSound);
+        deathParticles.Play();
+        Invoke("LoadLevelOne", 1f); //parameterize this time
+    }
+
+    private void StartSuccessSequence()
+    {
+        state = State.Transcending;
+        audioSource.Stop();
+        portEngineParticles.Stop();
+        starboardEngineParticles.Stop();
+        audioSource.PlayOneShot(levelFinishSound);
+        levelFinishParticles.Play();
+        Invoke("LoadNextScene", 1f); //parameterize this time
     }
 
     private void LoadLevelOne()
@@ -98,12 +119,22 @@ public class Rocket : MonoBehaviour
         {
             ApplyThrust();
         }
-        else audioSource.Stop();
-    }
+        else
+        {
+            audioSource.Stop();
+            starboardEngineParticles.Stop();
+            portEngineParticles.Stop();
+        }
+    } 
 
     private void ApplyThrust()
     {
         rigidbody.AddRelativeForce(Vector3.up * mainThrust);
-        if (!audioSource.isPlaying) audioSource.PlayOneShot(mainEngineSound);
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(mainEngineSound);
+            portEngineParticles.Play();
+            starboardEngineParticles.Play();
+        }
     }
 }
