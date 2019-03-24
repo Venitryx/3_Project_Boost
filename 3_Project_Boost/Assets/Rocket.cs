@@ -2,16 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour
 {
     [SerializeField] float rcsThrust = 250f;
     [SerializeField] float mainThrust = 100f;
+    [SerializeField] AudioClip mainEngineSound;
+    [SerializeField] AudioClip deathSound;
+    [SerializeField] AudioClip levelFinishSound;
+
     Rigidbody rigidbody;
     AudioSource audioSource;
 
-    enum State { Alive, Dying, Transcending};
+    enum State { Alive, Dying, Transcending };
     State state = State.Alive;
 
     // Start is called before the first frame update
@@ -28,9 +32,14 @@ public class Rocket : MonoBehaviour
     }
 
     private void ProcessInput()
-    {
-        Thrust();
-        Rotate();
+    { 
+        if(state == State.Alive)
+        {
+
+            RespondToThrustInput();
+            RsepondToRotateInput();
+        }
+
     }
 
     void OnCollisionEnter(Collision collision)
@@ -42,10 +51,14 @@ public class Rocket : MonoBehaviour
                 break;
             case "Finish":
                 state = State.Transcending;
+                audioSource.Stop();
+                audioSource.PlayOneShot(levelFinishSound);
                 Invoke("LoadNextScene", 1f); //parameterize this time
                 break;
             default:
                 state = State.Dying;
+                audioSource.Stop();
+                audioSource.PlayOneShot(deathSound);
                 Invoke("LoadLevelOne", 1f); //parameterize this time
                 break;
         }
@@ -62,16 +75,16 @@ public class Rocket : MonoBehaviour
         SceneManager.LoadScene(1); //todo allow for more than two levels
     }
 
-    private void Rotate()
+    private void RsepondToRotateInput()
     {
         rigidbody.freezeRotation = true; //freeze physics
         float rotationThisFrame = rcsThrust * Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.A) && state == State.Alive)
+        if (Input.GetKey(KeyCode.A))
         {
             transform.Rotate(Vector3.forward * rotationThisFrame);
         }
-        else if (Input.GetKey(KeyCode.D) && state == State.Alive)
+        else if (Input.GetKey(KeyCode.D))
         {
             transform.Rotate(Vector3.back * rotationThisFrame);
         }
@@ -79,13 +92,18 @@ public class Rocket : MonoBehaviour
         rigidbody.freezeRotation = false; //resume physics
     }
 
-    private void Thrust()
+    private void RespondToThrustInput()
     {
-        if (Input.GetKey(KeyCode.Space) && state == State.Alive)
+        if (Input.GetKey(KeyCode.Space))
         {
-            rigidbody.AddRelativeForce(Vector3.up * mainThrust);
-            if (!audioSource.isPlaying) audioSource.Play();
+            ApplyThrust();
         }
         else audioSource.Stop();
+    }
+
+    private void ApplyThrust()
+    {
+        rigidbody.AddRelativeForce(Vector3.up * mainThrust);
+        if (!audioSource.isPlaying) audioSource.PlayOneShot(mainEngineSound);
     }
 }
