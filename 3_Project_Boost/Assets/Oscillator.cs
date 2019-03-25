@@ -6,7 +6,7 @@ using UnityEngine;
 public class Oscillator : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] float period = 2f;
+    [SerializeField] float period = 5f;
     //todo remove from inspector later
     [Range(0, 1)] [SerializeField] float movementFactor;
 
@@ -23,6 +23,8 @@ public class Oscillator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (period <= Mathf.Epsilon) return;
+        
         float cycles = Time.time / period;
         const float tau = Mathf.PI * 2f;
         float rawSinWave = Mathf.Sin(cycles * tau);
