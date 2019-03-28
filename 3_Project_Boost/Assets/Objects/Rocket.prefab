@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1641097781}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -40}
+  m_LocalPosition: {x: 0, y: 0, z: -30}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6995868646397344321}
@@ -19310,6 +19310,7 @@ MonoBehaviour:
   portEngineParticles: {fileID: 4346484027364954586}
   deathParticles: {fileID: 4421087394562428012}
   levelFinishParticles: {fileID: 4447557620484984877}
+  levelID: 0
 --- !u!1 &6995868646876074543
 GameObject:
   m_ObjectHideFlags: 0

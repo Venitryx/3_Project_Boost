@@ -18,12 +18,15 @@ public class Rocket : MonoBehaviour
     [SerializeField] ParticleSystem deathParticles;
     [SerializeField] ParticleSystem levelFinishParticles;
 
+    [SerializeField] int levelID;
 
     Rigidbody rigidbody;
     AudioSource audioSource;
 
     enum State { Alive, Dying, Transcending };
     State state = State.Alive;
+
+    bool isCollidersOn = true;
 
     // Start is called before the first frame update
     void Start()
@@ -39,19 +42,20 @@ public class Rocket : MonoBehaviour
     }
 
     private void ProcessInput()
-    { 
-        if(state == State.Alive)
+    {
+        RespondToDebugInput();
+        if (state == State.Alive)
         {
 
             RespondToThrustInput();
             RsepondToRotateInput();
         }
-
     }
 
     void OnCollisionEnter(Collision collision)
     {
         if (state != State.Alive) return; //ignores collisions when dead
+
         switch(collision.gameObject.tag)
         {
             case "Friendly":
@@ -68,13 +72,15 @@ public class Rocket : MonoBehaviour
 
     private void StartDeathSequence()
     {
+        if (!isCollidersOn) return;
+
         state = State.Dying;
         audioSource.Stop();
         portEngineParticles.Stop();
         starboardEngineParticles.Stop();
         audioSource.PlayOneShot(deathSound);
         deathParticles.Play();
-        Invoke("LoadLevelOne", levelLoadDelay); //parameterize this time
+        Invoke("ReloadScene", levelLoadDelay); //parameterize this time
     }
 
     private void StartSuccessSequence()
@@ -88,14 +94,16 @@ public class Rocket : MonoBehaviour
         Invoke("LoadNextScene", levelLoadDelay); //parameterize this time
     }
 
-    private void LoadLevelOne()
+    private void ReloadScene()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(levelID);
     }
 
     private void LoadNextScene()
     {
-        SceneManager.LoadScene(1); //todo allow for more than two levels
+        levelID++;
+        SceneManager.LoadScene(levelID); //todo allow for more than two levels
+        
     }
 
     private void RsepondToRotateInput()
@@ -127,7 +135,23 @@ public class Rocket : MonoBehaviour
             starboardEngineParticles.Stop();
             portEngineParticles.Stop();
         }
-    } 
+    }
+
+    private void RespondToDebugInput()
+    {
+        if(Input.GetKey(KeyCode.C))
+        {
+            TogglePlayerColliders();
+        }
+        else if(Input.GetKey(KeyCode.N))
+        {
+            SceneManager.LoadScene(1);
+        }
+        else if (Input.GetKey(KeyCode.P))
+        {
+            SceneManager.LoadScene(0);
+        }
+    }
 
     private void ApplyThrust()
     {
@@ -138,5 +162,14 @@ public class Rocket : MonoBehaviour
             portEngineParticles.Play();
             starboardEngineParticles.Play();
         }
+    }
+
+    private void TogglePlayerColliders()
+    {
+        if (isCollidersOn)
+        {
+            isCollidersOn = false;
+        }
+        else isCollidersOn = true;
     }
 }
