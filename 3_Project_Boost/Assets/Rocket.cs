@@ -110,18 +110,22 @@ public class Rocket : MonoBehaviour
 
     private void RsepondToRotateInput()
     {
-        rigidbody.freezeRotation = true; //freeze physics
         float rotationThisFrame = rcsThrust * Time.deltaTime;
 
         if (Input.GetKey(KeyCode.A))
         {
-            transform.Rotate(Vector3.forward * rotationThisFrame);
+            RotateManually(rotationThisFrame);
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            transform.Rotate(Vector3.back * rotationThisFrame);
+            RotateManually(-rotationThisFrame);
         }
+    }
 
+    private void RotateManually(float rotationThisFrame)
+    {
+        rigidbody.freezeRotation = true; //freeze physics
+        transform.Rotate(Vector3.forward * rotationThisFrame);
         rigidbody.freezeRotation = false; //resume physics
     }
 
@@ -133,10 +137,15 @@ public class Rocket : MonoBehaviour
         }
         else
         {
-            audioSource.Stop();
-            starboardEngineParticles.Stop();
-            portEngineParticles.Stop();
+            StopApplyingThrust();
         }
+    }
+
+    private void StopApplyingThrust()
+    {
+        audioSource.Stop();
+        starboardEngineParticles.Stop();
+        portEngineParticles.Stop();
     }
 
     private void RespondToDebugInput()
