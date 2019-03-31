@@ -10,13 +10,12 @@ public class Oscillator : MonoBehaviour
     //todo remove from inspector later
     [Range(0, 1)] [SerializeField] float movementFactor;
 
-    Vector3 startingPos;
+    [SerializeField] Vector3 startingPos;
     [SerializeField] Vector3 endPos;
     Vector3 movementVector;
 
     void Start()
     {
-        startingPos = transform.position;
         movementVector = endPos - startingPos;
     }
 

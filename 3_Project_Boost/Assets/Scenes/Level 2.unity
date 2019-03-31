@@ -1358,6 +1358,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   period: 5
   movementFactor: 1
+  startingPos: {x: -0.2, y: 5.2, z: 5.4}
   endPos: {x: 2.06, y: -0.5, z: 5.4}
 --- !u!4 &709604655 stripped
 Transform:
@@ -1740,6 +1741,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   period: 5
   movementFactor: 0
+  startingPos: {x: 5.92, y: 58.15, z: -5.46}
   endPos: {x: -7.27, y: 34.9, z: -5.46}
 --- !u!1001 &1009895652
 PrefabInstance:

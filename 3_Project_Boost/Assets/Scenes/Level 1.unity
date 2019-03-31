@@ -2810,6 +2810,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   period: 5
   movementFactor: 0
+  startingPos: {x: 24.75, y: 40.67, z: -2.3}
   endPos: {x: 6.5, y: 9.3, z: -2.3}
 --- !u!4 &1545380918 stripped
 Transform:

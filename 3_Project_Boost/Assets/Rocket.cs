@@ -18,8 +18,6 @@ public class Rocket : MonoBehaviour
     [SerializeField] ParticleSystem deathParticles;
     [SerializeField] ParticleSystem levelFinishParticles;
 
-    [SerializeField] int levelID;
-
     Rigidbody rigidbody;
     AudioSource audioSource;
 
@@ -43,7 +41,7 @@ public class Rocket : MonoBehaviour
 
     private void ProcessInput()
     {
-        RespondToDebugInput();
+        if(Debug.isDebugBuild) RespondToDebugInput();
         if (state == State.Alive)
         {
 
@@ -96,13 +94,17 @@ public class Rocket : MonoBehaviour
 
     private void ReloadScene()
     {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int levelID = currentSceneIndex;
         SceneManager.LoadScene(levelID);
     }
 
     private void LoadNextScene()
     {
-        levelID++;
-        SceneManager.LoadScene(levelID); //todo allow for more than two levels
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int levelID = currentSceneIndex + 1;
+        if (levelID == SceneManager.sceneCountInBuildSettings) levelID = 0;
+        SceneManager.LoadScene(levelID);
         
     }
 
@@ -166,10 +168,6 @@ public class Rocket : MonoBehaviour
 
     private void TogglePlayerColliders()
     {
-        if (isCollidersOn)
-        {
-            isCollidersOn = false;
-        }
-        else isCollidersOn = true;
+        isCollidersOn = !isCollidersOn;
     }
 }
