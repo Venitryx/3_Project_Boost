@@ -108,6 +108,15 @@ public class Rocket : MonoBehaviour
         
     }
 
+    private void LoadPreviousScene()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int levelID = currentSceneIndex - 1;
+        if (levelID == -1) levelID = SceneManager.sceneCountInBuildSettings - 1;
+        SceneManager.LoadScene(levelID);
+
+    }
+
     private void RsepondToRotateInput()
     {
         float rotationThisFrame = rcsThrust * Time.deltaTime;
@@ -156,11 +165,15 @@ public class Rocket : MonoBehaviour
         }
         else if(Input.GetKey(KeyCode.N))
         {
-            SceneManager.LoadScene(1);
+            LoadNextScene();
+        }
+        else if (Input.GetKey(KeyCode.R))
+        {
+            ReloadScene();
         }
         else if (Input.GetKey(KeyCode.P))
         {
-            SceneManager.LoadScene(0);
+            LoadPreviousScene();
         }
     }
 
